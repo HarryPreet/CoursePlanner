@@ -37,6 +37,15 @@ public class Section {
         this.enrollments = enrollments;
     }
 
+    public String combineInstructor(){
+        String temp  = " ";
+        for( String s : instructors){
+
+            temp = s + temp;
+        }
+        return temp;
+    }
+
     @Override
     public String toString() {
         String prettyPrint = "";
