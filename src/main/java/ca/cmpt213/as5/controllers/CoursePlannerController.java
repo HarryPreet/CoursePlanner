@@ -32,7 +32,8 @@ public class CoursePlannerController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @GetMapping("api/departments/{id}/courses")
-    public List<String> getCourses(@PathVariable ("id") int departId) {
+    public List<String> getCourses(@PathVariable ("id") String Id) {
+        Integer departId = Integer.valueOf(Id);
         List<String> catNum = CourseSummary.accessCourses(departId);
 
         return catNum;
