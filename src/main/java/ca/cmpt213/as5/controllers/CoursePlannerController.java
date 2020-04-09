@@ -15,6 +15,7 @@ public class CoursePlannerController {
         CourseSummary.dumpModel();
     }
 
+    @PostMapping("/api/addoffering")
     @ResponseStatus(HttpStatus.CREATED)
     public void addOffering(@RequestBody ApiOfferingDataWrapper od){
         String data = od.getSemester() + "," +
@@ -30,6 +31,7 @@ public class CoursePlannerController {
         CourseSummary.addCourseToDatabase(cd);
     }
 
+    @PostMapping("/api/watchers")
     @ResponseStatus(HttpStatus.CREATED)
     public void addWatcher(@RequestBody ApiWatcherWrapper wd){
         CourseSummary.addToWatcherList(wd);
