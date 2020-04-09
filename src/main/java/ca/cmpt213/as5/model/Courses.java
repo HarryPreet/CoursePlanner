@@ -12,8 +12,6 @@ public class Courses {
     private String courseName;
     private String department;
     private int departmentId;
-    private long courseId;
-    private static long courseOfferingId  = 1;
     private List<CourseOffering> courseOfferings = new ArrayList<>();
 
     // Constructor
@@ -65,21 +63,11 @@ public class Courses {
     public void setCourseOfferings(List<CourseOffering> courseOfferings) {
         this.courseOfferings = courseOfferings;
     }
-    public long getCourseId() {
-        return courseId;
-    }
-
-    public void setCourseId(long courseId) {
-        this.courseId = courseId;
-    }
 
 
     public void addToGroup(CourseData cd){
         if(courseOfferings.isEmpty()){
-            CourseOffering co = new CourseOffering(cd);
-            co.setCourseOfferingId(courseOfferingId);
-            courseOfferingId++;
-            courseOfferings.add(co);
+            courseOfferings.add(new CourseOffering(cd));
         }
         for(CourseOffering co : courseOfferings){
             if(co.getSemester()==cd.getSemester() && co.getLocation().equals(cd.getLocation())){
@@ -87,10 +75,7 @@ public class Courses {
                 return;
             }
         }
-        CourseOffering co = new CourseOffering(cd);
-        co.setCourseOfferingId(courseOfferingId);
-        courseOfferingId++;
-        courseOfferings.add(co);
+        courseOfferings.add(new CourseOffering(cd));
     }
 
     @Override

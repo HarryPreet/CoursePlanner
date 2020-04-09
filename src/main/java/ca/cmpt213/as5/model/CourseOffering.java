@@ -13,7 +13,6 @@ public class CourseOffering {
     private long semester;
     private String location;
     private Section section;
-    private long  courseOfferingId;
 
     // Constructor
     public CourseOffering() {
@@ -45,13 +44,6 @@ public class CourseOffering {
         this.section = section;
     }
 
-    public long getCourseOfferingId() {
-        return courseOfferingId;
-    }
-
-    public void setCourseOfferingId(long courseOfferingId) {
-        this.courseOfferingId = courseOfferingId;
-    }
 
     public void addToSection(CourseData cd) {
         boolean flag = false;

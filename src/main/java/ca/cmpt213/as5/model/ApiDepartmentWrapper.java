@@ -1,28 +1,27 @@
 package ca.cmpt213.as5.model;
 
 public class ApiDepartmentWrapper {
-    private int deptId;
-    private String name;
+    private String department;
+    private int id;
 
-
-    public ApiDepartmentWrapper(String name, int deptId) {
-        this.name = name;
-        this.deptId = deptId;
+    public ApiDepartmentWrapper(String department, int id) {
+        this.department = department;
+        this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getDepartment() {
+        return department;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setDepartment(String department) {
+        this.department = department;
     }
 
-    public int getDeptId() {
-        return deptId;
+    public int getId() {
+        return id;
     }
 
-    public void setDeptId(int deptId) {
-        this.deptId = deptId;
+    public void setId(int id) {
+        this.id = id;
     }
 }

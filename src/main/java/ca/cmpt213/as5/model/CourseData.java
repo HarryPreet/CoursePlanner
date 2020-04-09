@@ -19,7 +19,6 @@ public class CourseData {
     private String code;
     private String courseName;
 
-
     // Constructor
     public CourseData(String[] dataElements) {
         this.setSemester(dataElements[0]);
@@ -63,9 +62,6 @@ public class CourseData {
     }
 
     // mutator
-
-
-
     public void setSemester(String semester) {
         try {
             this.semester = Integer.parseInt(semester);
