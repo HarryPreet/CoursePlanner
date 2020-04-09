@@ -45,6 +45,7 @@ public class CourseSummary {
     }
 
     public static void addDepartment() {
+
         int i = 1;
         for (Courses c : allCourses) {
             if (!departmentTracker.containsKey(c.getDepartment())) {
@@ -52,6 +53,7 @@ public class CourseSummary {
                 c.setDepartmentId(i);
                 i++;
             }
+            c.setDepartmentId(departmentTracker.get(c.getDepartment()));
         }
 
         for (HashMap.Entry<String, Integer> entry : departmentTracker.entrySet()) {
@@ -70,9 +72,15 @@ public class CourseSummary {
 
     public static List<String> accessCourses(int departId) {
 
+        List<String> coursesId  = new ArrayList<>();
+
         for  (Courses c : allCourses) {
-            if  (c)
+            if  (c.getDepartmentId() == departId) {
+                coursesId.add(c.getCourseCatalogNumber());
+            }
         }
+
+        return coursesId;
     }
 
 
