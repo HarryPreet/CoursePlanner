@@ -10,7 +10,6 @@ import java.util.List;
 public class CoursePlannerController {
 
     private Name name = new Name("H&S APP", "Shresth and Harry");
-    private  CourseSummary courseSummary = new CourseSummary();
 
     @ResponseStatus(HttpStatus.CREATED)
     @GetMapping("/api/about")
@@ -32,11 +31,28 @@ public class CoursePlannerController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @GetMapping("api/departments/{id}/courses")
-    public List<String> getCourses(@PathVariable ("id") String Id) {
+    public List<ApiCourseWrapper> getCourses(@PathVariable ("id") String Id) {
         Integer departId = Integer.valueOf(Id);
-        List<String> catNum = CourseSummary.accessCourses(departId);
+        List<ApiCourseWrapper> catNum = CourseSummary.accessCourses(departId);
 
         return catNum;
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @GetMapping("api/departments/{deptId}/courses/{courseId}/offerings")
+    public List<ApiCourseOfferingWrapper> getOfferings(@PathVariable ("deptId") int deptId, @PathVariable ("courseId") int courseId) {
+        List<ApiCourseOfferingWrapper> offCourses = CourseSummary.accessOfferings(deptId, courseId);
+
+        return offCourses;
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @GetMapping("api/departments/{deptId}/courses/{courseId}/offerings/{courseOffer}")
+    public List<ApiOfferingSectionWrapper> getSectionsOffered(@PathVariable ("deptId") int deptId, @PathVariable ("courseId") int courseId,
+                                                              @PathVariable ("courseOffer") int courseOffer) {
+        List<ApiOfferingSectionWrapper> sectionOffer = CourseSummary.accessOfferingSection(deptId,courseId,courseOffer);
+
+        return sectionOffer;
     }
 
     @PostMapping("/api/addoffering")
