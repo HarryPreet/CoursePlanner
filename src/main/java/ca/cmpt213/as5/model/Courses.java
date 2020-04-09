@@ -8,18 +8,30 @@ import java.util.List;
  * department and the list of all the courses offered.
  */
 public class Courses {
+    private String courseCatalogNumber;
     private String courseName;
     private String department;
+    private int departmentId;
     private List<CourseOffering> courseOfferings = new ArrayList<>();
 
     // Constructor
     public Courses(CourseData cd) {
+        this.courseCatalogNumber = cd.getCatalogNumber();
         this.courseName = cd.getCourseName();
         courseOfferings.add(new CourseOffering(cd));
         this.department = cd.getSubject();
     }
 
     // Accessor and mutator
+
+    public String getCourseCatalogNumber() {
+        return courseCatalogNumber;
+    }
+
+    public void setCourseCatalogNumber(String courseCatalogNumber) {
+        this.courseCatalogNumber = courseCatalogNumber;
+    }
+
     public String getCourseName() {
         return courseName;
     }
@@ -34,6 +46,14 @@ public class Courses {
 
     public void setDepartment(String department) {
         this.department = department;
+    }
+
+    public int getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(int departmentId) {
+        this.departmentId = departmentId;
     }
 
     public List<CourseOffering> getCourseOfferings() {

@@ -17,12 +17,11 @@ public class CourseSummary {
     private static List<Courses> allCourses;
     private static HashMap<String, Integer> departmentTracker = new HashMap<>();
     private static List<ApiDepartmentWrapper> departmentWrapperList = new ArrayList<>();
-    private static List<ApiWatcherWrapper> watcherList = new ArrayList<>();
 
-    public static void addToWatcherList(ApiWatcherWrapper wd){
-        watcherList.add(wd);
+
+    public static List<ApiDepartmentWrapper> getDepartmentWrapperList() {
+        return departmentWrapperList;
     }
-
 
     public static void createModel(){
         allData = FileReaderCSV.readFromFile();
@@ -44,11 +43,13 @@ public class CourseSummary {
         }
         addDepartment();
     }
+
     public static void addDepartment() {
         int i = 1;
         for (Courses c : allCourses) {
             if (!departmentTracker.containsKey(c.getDepartment())) {
                 departmentTracker.put(c.getDepartment(), i);
+                c.setDepartmentId(i);
                 i++;
             }
         }
@@ -67,28 +68,22 @@ public class CourseSummary {
         FileReaderCSV.addToFile(cd);
     }
 
+    public static List<String> accessCourses(int departId) {
+
+        for  (Courses c : allCourses) {
+            if  (c)
+        }
+    }
+
+
     public static void dumpModel(){
         createModel();
         for(Courses c : allCourses){
             System.out.println(c);
         }
+//        for (ApiDepartmentWrapper d : departmentWrapperList){
+//            System.out.println(d.getDepartment());
+//            System.out.println(d.getId());
+//        }
     }
-    public static List<ApiWatcherWrapper> getWatcherList() {
-        return watcherList;
-    }
-
-    public static void setWatcherList(List<ApiWatcherWrapper> watcherList) {
-        CourseSummary.watcherList = watcherList;
-    }
-
-
-
-
-
-    public static List<ApiDepartmentWrapper> getDepartmentWrapperList() {
-        return departmentWrapperList;
-    }
-
-
-
 }

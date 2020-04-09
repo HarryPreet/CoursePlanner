@@ -15,7 +15,7 @@ import java.util.Scanner;
  */
 public class FileReaderCSV {
     private static List<CourseData> dataList = null;
-    private static final String csvFile = "data/small_data.csv";
+    private static final String csvFile = "data/course_data_2018.csv";
     private static String[] dataElements;
 
     public static List<CourseData> readFromFile(){
