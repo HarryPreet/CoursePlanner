@@ -1,5 +1,7 @@
 package ca.cmpt213.as5.model;
 
+import ca.cmpt213.as5.controllers.CoursePlannerController;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +22,9 @@ public class ApiWatcherWrapper {
             if(c.getCourseId() == courseID && c.getDepartmentId() == deptID){
                 this.course = new ApiCourseWrapper(courseID,c.getCourseCatalogNumber());
             }
+        }
+        if(department == null || course == null){
+            throw new CoursePlannerController.badIdExceptionHandler("No such id");
         }
         this.id = id;
         this.events = new ArrayList<>();

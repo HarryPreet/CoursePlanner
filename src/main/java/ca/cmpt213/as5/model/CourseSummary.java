@@ -13,9 +13,9 @@ import java.util.*;
 public class CourseSummary {
     private static List<CourseData> allData;
     private static List<Courses> allCourses;
-    private static List<ApiWatcherWrapper> allWatchers = new ArrayList<>();
-    private static HashMap<String, Integer> departmentTracker = new HashMap<>();
-    private static List<ApiDepartmentWrapper> departmentWrapperList = new ArrayList<>();
+    private static List<ApiWatcherWrapper> allWatchers ;
+    private static HashMap<String, Integer> departmentTracker ;
+    private static List<ApiDepartmentWrapper> departmentWrapperList ;
     private static Date date = new Date();
 
 
@@ -26,6 +26,9 @@ public class CourseSummary {
     public static void createModel() {
         allData = FileReaderCSV.readFromFile();
         allCourses = new ArrayList<>();
+        allWatchers = new ArrayList<>();
+        departmentTracker = new HashMap<>();
+        departmentWrapperList = new ArrayList<>();
         if (allCourses.isEmpty()) {
             allCourses.add(new Courses(allData.get(0)));
         }
@@ -50,25 +53,6 @@ public class CourseSummary {
         for (Courses c : allCourses) {
             c.setCourseId(courseId);
             courseId++;
-        }
-    }
-    public static  void refresh(){
-        allData = FileReaderCSV.readFromFile();
-        allCourses = new ArrayList<>();
-        if (allCourses.isEmpty()) {
-            allCourses.add(new Courses(allData.get(0)));
-        }
-        for (int j = 1; j < allData.size(); j++) {
-            boolean flag = true;
-            for (Courses allCourse : allCourses) {
-                if (allData.get(j).getCourseName().equals(allCourse.getCourseName())) {
-                    allCourse.addToGroup(allData.get(j));
-                    flag = false;
-                }
-            }
-            if (flag) {
-                allCourses.add(new Courses(allData.get(j)));
-            }
         }
     }
 
@@ -110,12 +94,11 @@ public class CourseSummary {
             }
         }
         FileReaderCSV.addToFile(cd);
+        createModel();
     }
 
     public static List<ApiCourseWrapper> coursesByDepartmentID(int departId) {
-
         List<ApiCourseWrapper> courses = new ArrayList<>();
-
         for (Courses c : allCourses) {
             if (c.getDepartmentId() == departId) {
                 ApiCourseWrapper newCourse = new ApiCourseWrapper(c.getCourseId(), c.getCourseCatalogNumber());
