@@ -16,6 +16,16 @@ public class Courses {
     private static long courseOfferingId  = 1;
     private List<CourseOffering> courseOfferings = new ArrayList<>();
 
+    public List<ApiWatcherWrapper> getObservers() {
+        return observers;
+    }
+
+    public void setObservers(List<ApiWatcherWrapper> observers) {
+        this.observers = observers;
+    }
+
+    private List<ApiWatcherWrapper> observers = new ArrayList<>();
+
     // Constructor
     public Courses(CourseData cd) {
         this.courseCatalogNumber = cd.getCatalogNumber();
@@ -71,6 +81,12 @@ public class Courses {
 
     public void setCourseId(long courseId) {
         this.courseId = courseId;
+    }
+
+    public void notifyObservers(String message){
+        for(ApiWatcherWrapper ad : this.observers){
+            ad.getEvents().add(message);
+        }
     }
 
 

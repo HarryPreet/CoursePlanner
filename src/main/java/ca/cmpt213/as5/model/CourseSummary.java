@@ -1,9 +1,9 @@
 package ca.cmpt213.as5.model;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 /**
  * CourseSummary class contains the main function
@@ -13,8 +13,10 @@ import java.util.List;
 public class CourseSummary {
     private static List<CourseData> allData;
     private static List<Courses> allCourses;
+    private static List<ApiWatcherWrapper> allWatchers = new ArrayList<>();
     private static HashMap<String, Integer> departmentTracker = new HashMap<>();
     private static List<ApiDepartmentWrapper> departmentWrapperList = new ArrayList<>();
+    private static Date date = new Date();
 
 
     public static List<ApiDepartmentWrapper> getDepartmentWrapperList() {
@@ -50,6 +52,25 @@ public class CourseSummary {
             courseId++;
         }
     }
+    public static  void refresh(){
+        allData = FileReaderCSV.readFromFile();
+        allCourses = new ArrayList<>();
+        if (allCourses.isEmpty()) {
+            allCourses.add(new Courses(allData.get(0)));
+        }
+        for (int j = 1; j < allData.size(); j++) {
+            boolean flag = true;
+            for (Courses allCourse : allCourses) {
+                if (allData.get(j).getCourseName().equals(allCourse.getCourseName())) {
+                    allCourse.addToGroup(allData.get(j));
+                    flag = false;
+                }
+            }
+            if (flag) {
+                allCourses.add(new Courses(allData.get(j)));
+            }
+        }
+    }
 
     public static void addDepartmentId() {
 
@@ -73,6 +94,21 @@ public class CourseSummary {
     }
 
     public static void addCourseToDatabase(CourseData cd) {
+        for(Courses c : allCourses){
+            if(cd.getCourseName().equals(c.getCourseName())){
+                LocalDateTime myDateObj = LocalDateTime.now();
+                DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("E, MMM dd yyyy HH:mm:ss");
+                String formattedDate = myDateObj.format(myFormatObj);
+                //[date]: Added section [type] with enrollment ([total]/[cap]) to offering [term] [year]
+                c.notifyObservers(formattedDate+": "+"Added section " +
+                                    cd.getCode()+" with enrollment ([" +
+                                    cd.getEnrolmentTotal() +"]/" +
+                                    cd.getEnrolmentCapacity()+")"+ " to offering "+
+                                    getTerm(cd.getSemester()) +
+                                    getYear(cd.getSemester()));
+                break;
+            }
+        }
         FileReaderCSV.addToFile(cd);
     }
 
@@ -86,7 +122,6 @@ public class CourseSummary {
                 courses.add(newCourse);
             }
         }
-
         return courses;
     }
 
@@ -159,4 +194,23 @@ public class CourseSummary {
         }
 
     }
+    public static HashMap<String, Integer> getDepartmentTracker() {
+        return departmentTracker;
+    }
+
+    public static void setDepartmentTracker(HashMap<String, Integer> departmentTracker) {
+        CourseSummary.departmentTracker = departmentTracker;
+    }
+    public static List<Courses> getAllCourses() {
+        return allCourses;
+    }
+
+    public static void setAllCourses(List<Courses> allCourses) {
+        CourseSummary.allCourses = allCourses;
+    }
+
+    public static List<ApiWatcherWrapper> getAllWatchers() {
+        return allWatchers;
+    }
+
 }

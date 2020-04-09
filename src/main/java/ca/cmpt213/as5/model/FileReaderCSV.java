@@ -15,7 +15,7 @@ import java.util.Scanner;
  */
 public class FileReaderCSV {
     private static List<CourseData> dataList = null;
-    private static final String csvFile = "data/course_data_2018.csv";
+    private static final String csvFile = "data/small_data.csv";
     private static String[] dataElements;
 
     public static List<CourseData> readFromFile(){
@@ -41,7 +41,7 @@ public class FileReaderCSV {
         //SEMESTER,SUBJECT,CATALOGNUMBER,LOCATION,ENROLMENTCAPACITY,ENROLMENTTOTAL,INSTRUCTORS,COMPONENTCODE
         try{
             FileWriter outputFile = new FileWriter(csvFile,true);
-            String data =
+            String data ="\n"+
                     cd.getSemester() + ","+
                     cd.getSubject() + "," +
                     cd.getCatalogNumber()+ ","+
@@ -49,7 +49,7 @@ public class FileReaderCSV {
                     cd.getEnrolmentCapacity() +","+
                     cd.getEnrolmentTotal() + ","+
                     cd.getInstructors() + ","+
-                    cd.getCode() + "\n";
+                    cd.getCode() ;
             outputFile.append(data);
             outputFile.flush();
             outputFile.close();

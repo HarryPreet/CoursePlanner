@@ -38,10 +38,10 @@ public class Section {
     }
 
     public String combineInstructor(){
-        String temp  = " ";
+        String temp  = "";
         for( String s : instructors){
 
-            temp = s + temp;
+            temp = temp + s + " ";
         }
         return temp;
     }
