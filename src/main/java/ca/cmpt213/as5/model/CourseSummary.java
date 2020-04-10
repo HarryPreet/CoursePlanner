@@ -1,6 +1,7 @@
 package ca.cmpt213.as5.model;
 
-import java.text.SimpleDateFormat;
+import ca.cmpt213.as5.model.WrapperClasses.*;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -12,8 +13,8 @@ import java.util.*;
  */
 public class CourseSummary {
     private static List<CourseData> allData;
-    private static List<Courses> allCourses;
-    private static List<ApiWatcherWrapper> allWatchers ;
+    private static List<Courses> allCourses = new ArrayList<>();;
+    private static List<ApiWatcherWrapper> allWatchers = new ArrayList<>();
     private static HashMap<String, Integer> departmentTracker ;
     private static List<ApiDepartmentWrapper> departmentWrapperList ;
     private static Date date = new Date();
@@ -25,8 +26,6 @@ public class CourseSummary {
 
     public static void createModel() {
         allData = FileReaderCSV.readFromFile();
-        allCourses = new ArrayList<>();
-        allWatchers = new ArrayList<>();
         departmentTracker = new HashMap<>();
         departmentWrapperList = new ArrayList<>();
         if (allCourses.isEmpty()) {
@@ -34,18 +33,26 @@ public class CourseSummary {
         }
         for (int j = 1; j < allData.size(); j++) {
             boolean flag = true;
-            for (Courses allCourse : allCourses) {
-                if (allData.get(j).getCourseName().equals(allCourse.getCourseName())) {
-                    allCourse.addToGroup(allData.get(j));
-                    flag = false;
-                }
-            }
-            if (flag) {
-                allCourses.add(new Courses(allData.get(j)));
-            }
+            addEntry(allData.get(j));
+
         }
         addDepartmentId();
         addCourseId();
+    }
+
+    public static void addEntry(CourseData cd){
+        boolean flag =  true;
+        for (Courses allCourse : allCourses) {
+            if (cd.getCourseName().equals(allCourse.getCourseName())) {
+                allCourse.addToGroup(cd);
+                flag = false;
+            }
+        }
+        if (flag) {
+            allCourses.add(new Courses(cd));
+        }
+
+
     }
 
     public static void addCourseId() {
@@ -83,18 +90,17 @@ public class CourseSummary {
                 LocalDateTime myDateObj = LocalDateTime.now();
                 DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("E, MMM dd yyyy HH:mm:ss");
                 String formattedDate = myDateObj.format(myFormatObj);
-                //[date]: Added section [type] with enrollment ([total]/[cap]) to offering [term] [year]
                 c.notifyObservers(formattedDate+": "+"Added section " +
                                     cd.getCode()+" with enrollment ([" +
                                     cd.getEnrolmentTotal() +"]/" +
                                     cd.getEnrolmentCapacity()+")"+ " to offering "+
-                                    getTerm(cd.getSemester()) +
+                                    getTerm(cd.getSemester()) + " "+
                                     getYear(cd.getSemester()));
                 break;
             }
         }
         FileReaderCSV.addToFile(cd);
-        createModel();
+        addEntry(cd);
     }
 
     public static List<ApiCourseWrapper> coursesByDepartmentID(int departId) {
@@ -171,7 +177,6 @@ public class CourseSummary {
     }
 
     public static void dumpModel() {
-        createModel();
         for (Courses c : allCourses) {
             System.out.println(c);
         }
@@ -194,6 +199,37 @@ public class CourseSummary {
 
     public static List<ApiWatcherWrapper> getAllWatchers() {
         return allWatchers;
+    }
+
+    public static List<ApiGraphPointWrapper> getGraphPoints(int deptId){
+        List<ApiGraphPointWrapper> graphPoints = new ArrayList<>();
+
+        for(Courses c :allCourses){
+            if(c.getDepartmentId() == deptId){
+               for(CourseOffering co : c.getCourseOfferings()){
+                   boolean flag = true;
+                   ApiGraphPointWrapper graph = new ApiGraphPointWrapper();
+                   for(Type t : co.getSections().getEnrollments()){
+                       if(t.getType().equals("LEC")){
+                           graph.setSemesterCode(co.getSemester());
+                           graph.setTotalCoursesTaken(t.getEnrollmentTotal());
+                       }
+                   }
+                   for(ApiGraphPointWrapper g :graphPoints){
+                       if(g.getSemesterCode()==graph.getSemesterCode()){
+                           g.setTotalCoursesTaken(g.getTotalCoursesTaken() + graph.getTotalCoursesTaken());
+                           flag = false;
+                       }
+                   }
+                   if(flag){
+                       graphPoints.add(graph);
+                   }
+               }
+
+            }
+
+        }
+        return graphPoints;
     }
 
 }

@@ -1,5 +1,7 @@
 package ca.cmpt213.as5.model;
 
+import ca.cmpt213.as5.model.WrapperClasses.ApiWatcherWrapper;
+
 import java.util.ArrayList;
 import java.util.List;
 

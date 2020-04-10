@@ -1,10 +1,13 @@
 package ca.cmpt213.as5.controllers;
 
 import ca.cmpt213.as5.model.*;
+import ca.cmpt213.as5.model.WrapperClasses.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.*;
 
 @RestController
 public class CoursePlannerController {
@@ -33,6 +36,12 @@ public class CoursePlannerController {
         if(departmentCourses.isEmpty()){
             throw new badIdExceptionHandler("Wrong department id");
         }
+        Collections.sort(departmentCourses, new Comparator<ApiCourseWrapper>() {
+            @Override
+            public int compare(final ApiCourseWrapper object1, final ApiCourseWrapper object2) {
+                return object1.getCatalogNumber().compareTo(object2.getCatalogNumber());
+            }
+        });
         return departmentCourses;
     }
 
@@ -121,5 +130,9 @@ public class CoursePlannerController {
             super(str);
         }
     }
-
+    @GetMapping("/api/stats/students-per-semester")
+    public List<ApiGraphPointWrapper> returnGraphPoints(@RequestParam(required = false,value = "deptId") String deptId){
+        int id = Integer.valueOf(deptId);
+        return CourseSummary.getGraphPoints(id);
+    }
 }
