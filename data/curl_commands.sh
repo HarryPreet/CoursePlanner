@@ -19,9 +19,9 @@ curl -i -H "Content-Type: application/json" \
 
 # NOTE: Your ID's will likely be different from these!
 # Change them to match your ID's for your own testing.
-DEPT=2      # CMPT
-COURSE=103  # 213
-OFFERING=7063  # Brian's 2018 offering
+DEPT=1      # ENSC
+COURSE=1  # 703
+OFFERING=7063  # Pra
 
 
 # Get departments

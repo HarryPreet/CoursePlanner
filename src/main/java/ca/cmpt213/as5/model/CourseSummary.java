@@ -25,7 +25,7 @@ public class CourseSummary {
     }
 
     public static void createModel() {
-        allData = FileReaderCSV.readFromFile();
+        allData = FileManager.readFromFile();
         departmentTracker = new HashMap<>();
         departmentWrapperList = new ArrayList<>();
         if (allCourses.isEmpty()) {
@@ -99,7 +99,7 @@ public class CourseSummary {
                 break;
             }
         }
-        FileReaderCSV.addToFile(cd);
+        FileManager.addToFile(cd);
         addEntry(cd);
     }
 
